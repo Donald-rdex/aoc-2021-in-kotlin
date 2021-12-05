@@ -23,7 +23,7 @@ fun main() {
 fun fillHVGridCells(input: List<String>, gridCells: MutableMap<Pair<Int, Int>, Int>) {
     // equation for a line: y = mx + b
     // slope of a line: m = (y2-y1)/(x2-x1), or undefined (1)
-    // -- subnote, I had this wrong for the past hour with the numerator and demoninator swapped, brain fail
+    // -- subnote, I had this wrong for the past hour with the numerator and denominator swapped, brain fail
     // however ignoring in part one since only looking for slope 0 (y2=y1) or 1 (x2=x1)
 
     for (line in input) {
@@ -41,7 +41,7 @@ fun fillHVGridCells(input: List<String>, gridCells: MutableMap<Pair<Int, Int>, I
             }
         }
         if (y1 == y2) {
-            var currentVal = 0
+            var currentVal: Int
             val maxX = if (x1 > x2) x1 else x2
             val minX = if (x1 < x2) x1 else x2
             for (x in minX..maxX) {
