@@ -8,7 +8,7 @@ fun main() {
     fun parseInput(polymerInput: List<String>, polymerRules: MutableMap<String, String>): String {
 
         for (i in 2 until polymerInput.size) {  //seems like i could replace this with a filter() and toMap() call...
-            var insertString = polymerInput[i].split(" -> ", limit = 2)
+            val insertString = polymerInput[i].split(" -> ", limit = 2)
             polymerRules[insertString.first()] = insertString.last()
         }
 
@@ -29,11 +29,11 @@ fun main() {
             var nextPolymerString = ""
             var pairIndex = 0
             while (pairIndex < currentPolyString.length - 1) {
-                var pair = currentPolyString[pairIndex].toString() + currentPolyString[pairIndex + 1].toString()
+                val pair = currentPolyString[pairIndex].toString() + currentPolyString[pairIndex + 1].toString()
                 nextPolymerString += when (pairIndex) {
-                    0 -> currentPolyString[pairIndex].toString() +
+                    0 -> currentPolyString[0].toString() +
                             polymerRules[pair] +
-                            currentPolyString[pairIndex + 1].toString()
+                            currentPolyString[1].toString()
                     else -> polymerRules[pair] +
                             currentPolyString[pairIndex + 1].toString()
                 }
@@ -75,7 +75,7 @@ fun main() {
     val testInput = readInput("Day14_test")
 
     var polymerTemplate: String
-    var polymerRules = mutableMapOf<String, String>()
+    val polymerRules = mutableMapOf<String, String>()
 
     polymerTemplate = parseInput(testInput, polymerRules)
 
