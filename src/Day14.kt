@@ -47,15 +47,45 @@ fun main() {
             }
         }
 
+        val charCounts = mutableMapOf<String, Int>()
+        for (i in currentPolyString) {
+            if (charCounts.containsKey(i.toString())) {
+                charCounts[i.toString()] = charCounts[i.toString()]!! + 1
+            } else {
+                charCounts[i.toString()] = 1
+            }
+        }
+        if (verbose) println(charCounts)
+
+        var mostcommon = Pair("", 0)
+        var leastcommon = Pair("", Int.MAX_VALUE)
+        charCounts.forEach { (t, u) ->
+            if (u > mostcommon.second) {
+                mostcommon = Pair(t, u)
+            }
+            if (u < leastcommon.second) {
+                leastcommon = Pair(t, u)
+            }
+        }
+
+        println("${mostcommon.first} - ${leastcommon.first} = ${mostcommon.second - leastcommon.second}")
 
     }
 
     val testInput = readInput("Day14_test")
 
-    var polymerTemplate = ""
+    var polymerTemplate: String
     var polymerRules = mutableMapOf<String, String>()
 
     polymerTemplate = parseInput(testInput, polymerRules)
 
-    part01(polymerTemplate, polymerRules, 5)
+    part01(polymerTemplate, polymerRules, 10)
+
+    // test data passes, using real input
+    polymerRules.clear()
+    val realInput = readInput("Day14")
+    polymerTemplate = parseInput(realInput, polymerRules)
+    part01(polymerTemplate, polymerRules, 10)
+
+
 }
