@@ -43,7 +43,7 @@ fun main() {
             currentPolyString = nextPolymerString
             currentStep += 1
             if (verbose) {
-                println("$currentStep: $currentPolyString")
+                println("$currentStep: ${currentPolyString.length}")
             }
         }
 
@@ -87,5 +87,60 @@ fun main() {
     polymerTemplate = parseInput(realInput, polymerRules)
     part01(polymerTemplate, polymerRules, 10)
 
+    /*
+    part02 - same but with 40 steps.
+    the simple map i used in part01 won't work because the string length doubles in size each step
+    after 18 steps it is now 786433 characters long, Yay for geometric progression.
+    ...
+    after reading a reddit thread, the solution seems to be to store a counter of the pairs and the mutated pairs
+    https://www.reddit.com/r/adventofcode/comments/tyy2vw/struggling_on_day_14_part_2_in_python/?utm_source=share&utm_medium=web2x&context=3
+    */
 
+    fun part02(initialPolyTemplate: String, polymerRules: MutableMap<String, String>, steps: Int) {
+        // same effect as part01, but with counter of pairs implementation.
+        var currentStep = 0
+        val polyPairCounts = mutableMapOf<String, Int>()
+
+        initialPolyTemplate.forEachIndexed { index, c ->
+            if (index < initialPolyTemplate.length - 1 ) {
+                val pair = c + initialPolyTemplate[index+1].toString()
+                polyPairCounts[pair] = polyPairCounts.getOrElse(pair) { 0 } + 1
+            }
+        }
+
+        if (verbose) {
+            println("$polyPairCounts")
+        }
+
+        while (currentStep < steps) {
+            val nextPolyPairCounts = mutableMapOf<String, Int>()
+            nextPolyPairCounts.putAll(polyPairCounts)
+
+            for ((pair, pairCount) in polyPairCounts) {
+                val pairOne = pair[0] + polymerRules[pair].toString()
+                val pairTwo = polymerRules[pair] + pair[1]
+
+                nextPolyPairCounts[pairOne] = nextPolyPairCounts.getOrElse(pairOne) { 1 } + pairCount
+                nextPolyPairCounts[pairTwo] = nextPolyPairCounts.getOrElse(pairTwo) { 1 } + pairCount
+                nextPolyPairCounts[pair] = 0s
+            }
+            polyPairCounts.clear()
+            polyPairCounts.putAll(nextPolyPairCounts)
+
+            currentStep += 1
+        }
+        if (verbose) {
+            println("$polyPairCounts")
+        }
+
+    }
+
+    println("--- Part 02 ---")
+    polymerRules.clear()
+    polymerTemplate = parseInput(testInput, polymerRules)
+    part02(polymerTemplate, polymerRules, 40)
+
+    polymerRules.clear()
+    // polymerTemplate = parseInput(realInput, polymerRules)
+    // part01(polymerTemplate, polymerRules, 40)
 }
